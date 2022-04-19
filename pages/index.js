@@ -14,6 +14,33 @@ export default function Home() {
   const [link, setLink] = useState(null);
   const [svg, setSvg] = useState("")
 
+  const connectWallet = async () => {
+    try {
+      const { ethereum } = window;
+      
+      if (!ethereum) {
+        toast.error("Metamask required");
+        return;
+      }
+
+      const accounts = await ethereum.request({method : "eth_requestAccounts" })
+      const currentAccount = accounts[0]
+
+      setAccount(accounts[0])
+      console.log(currentAccount)
+
+      toast("Wallet connected!", {
+        icon: '👏',
+      });
+
+      eventListener()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+
   const walletIsConnected = async() => {
     const { ethereum } = window
 
@@ -170,6 +197,8 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to OCEAN
         </h1>
+
+        <button onClick={connectWallet}>Connect walltet</button>
 
         <p>I see myself as someone who...</p>
 
